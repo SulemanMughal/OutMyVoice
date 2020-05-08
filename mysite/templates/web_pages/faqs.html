@@ -1,0 +1,341 @@
+{% extends 'mysite/base.html' %}
+{% load static getImageBanner %}
+
+{% block title %}FAQs{% endblock %}
+
+{% block content %}
+
+<section class="page-banner">
+    {% if request.user|getImageBanner %}
+    <div class="image-layer" style="background-image:url('/media/{{ request.user|getImageBanner }}');"></div>
+
+{% else %}
+<div class="image-layer" style="background-image:url('{% static 'mysite/images/background/banner-image-5.jpg' %}');"></div>
+{% endif %}
+
+    <div class="banner-inner">
+        <div class="auto-container">
+            <div class="inner-container clearfix">
+                <h1>FAQ's</h1>
+                <div class="page-nav">
+                    <ul class="bread-crumb clearfix">
+                        <li><a href="{% url 'home_page' %}">Home</a></li>
+                        <li class="active">FAQ's</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--FAQs Section-->
+<section class="faqs-section">
+    <div class="auto-container">
+        <div class="sec-title with-separator centered">
+            <h2>I Have a Question About</h2>
+            <div class="separator"><span class="cir c-1"></span><span class="cir c-2"></span><span class="cir c-3"></span></div>
+            <div class="lower-text">You have the rights to ask any legal questions, so don’t hestitate to ask us here are listed some questions & answers</div>
+        </div>
+
+        <div class="tabs-box faq-tabs">
+            <div class="tab-buttons">
+                <div class="row clearfix">
+                    <div class="col-lg-2 col-md-4 col-md-4 col-sm-6">
+                        <div class="btn-inner tab-btn active-btn" data-tab="#tab-1">
+                            <span></span>
+                            <span class="txt">Account</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-md-4 col-sm-6">
+                        <div class="btn-inner tab-btn" data-tab="#tab-2">
+                            <span></span>
+                            <span class="txt">Petition</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-md-4 col-sm-6">
+                        <div class="btn-inner tab-btn" data-tab="#tab-3">
+                            <span></span>
+                            <span class="txt">Commendation</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-md-4 col-sm-6">
+                        <div class="btn-inner tab-btn" data-tab="#tab-4">
+                            <span></span>
+                            <span class="txt">Donation</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-md-4 col-sm-6">
+                        <div class="btn-inner tab-btn" data-tab="#tab-5">
+                            <span></span>
+                            <span class="txt">Blog</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-md-4 col-sm-6">
+                        <div class="btn-inner tab-btn" data-tab="#tab-6">
+                            <span></span>
+                            <span class="txt">Others</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs-content">
+                <!--Tab-->
+                <div class="tab active-tab" id="tab-1">
+                    <div class="row clearfix">
+                        {% if obj_account_1 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_account_1 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if obj_account_2 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_account_2 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+             
+                <div class="tab" id="tab-2">
+                    <div class="row clearfix">
+                        {% if obj_petition_1 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_petition_1 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if obj_petition_1 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_petition_1 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+                <div class="tab" id="tab-3">
+                    <div class="row clearfix">
+                        {% if obj_c_1 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_c_1 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if obj_c_2 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_c_2 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <div class="tab" id="tab-4">
+                    <div class="row clearfix">
+                        {% if obj_d_1 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_d_1 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if obj_d_2 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_d_2 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <div class="tab" id="tab-5">
+                    <div class="row clearfix">
+                        {% if obj_b_1 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_b_1 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if obj_b_2 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_b_2 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <div class="tab" id="tab-6">
+                    <div class="row clearfix">
+                        {% if obj_o_1 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_o_1 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if obj_o_2 %}
+                        <div class="tab-col col-lg-6 col-md-12 col-sm-12">
+                            <div class="inner">
+                                <div class="accordion-box">
+                                    {% for i in obj_o_2 %}
+                                    <div class="accordion block">
+                                        <div class="acc-btn">{{ i.questions }} ?<div class="icon flaticon-cross"></div></div>
+                                        <div class="acc-content">
+                                            <div class="content">
+                                                <div class="text">{{ i.answers }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

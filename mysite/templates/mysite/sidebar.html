@@ -1,0 +1,92 @@
+{% load static %}
+<div class="scrollbar-sidebar">
+    <div class="app-sidebar__inner">
+        <ul class="vertical-nav-menu">
+            <li class="app-sidebar__heading">Petitions</li>
+            <li  {% if create_petition_section %} class="mm-active" {% endif %}>
+                <a href="{% url 'Start-a-Petition' %}"><i class="metismenu-icon fa fa-plus-circle"></i>Create Petition</a>
+            </li>
+            {% if request.user.is_authenticated %}
+                {% if profile %}
+                    {% if profile.golbal_Admin == "True" or profile.Coverage_Admin != "None"  %}
+                        <li {% if dashboard_section or petition_detail_section or view_specific_petiton_response_only  %} class="mm-active" {% endif %}>
+                            <a href="{% url 'dashboard' %}"><i class="metismenu-icon fa fa-eye"></i>View Petititons</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            
+            {% endif %}
+            <li {% if my_petition_view  %} class="mm-active" {% endif %}>
+                <a href="{% url 'Self-Petitions' %}"><i class="metismenu-icon fa fa-eye"></i>My Petitions</a>
+            </li>
+            
+            
+            <li class="app-sidebar__heading">Commendations</li>
+
+            <li {% if create_commendation_section %}class="mm-active" {% endif %}>
+                <a href="{% url 'Start-a-Commendation' %}"><i class="metismenu-icon fa fa-plus-circle"></i>Create Commendation</a>
+            </li>
+            {% if request.user.is_authenticated %}
+                {% if profile %}
+                    {% if profile.golbal_Admin == "True" or profile.Coverage_Admin != "None"  %}
+                        <li {% if commendations_section %} class="mm-active" {% endif %}>
+                            <a href="{% url 'all-commendations-url' %}"><i class="metismenu-icon fa fa-eye"></i>View Commendations</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+            <li {% if my_commendation_view %} class="mm-active" {% endif %}>
+                <a href="{% url 'Self-Commendation' %}"><i class="metismenu-icon fa fa-eye"></i>My Commendations</a>
+            </li>
+
+            
+            
+            <li >
+                <a href="{% url 'Partner' %}"><i class="metismenu-icon fa fa-eye"></i>Partners</a>
+            </li>
+            
+            
+            
+            <li >
+                <a href="{% url  'list' %}"><i class="metismenu-icon fa fa-eye"></i>Blogs</a>
+            </li>
+            
+            <li >
+                <a href="https://ndf.ng/"><i class="metismenu-icon fa fa-eye"></i>NDF</a>
+            </li>
+            
+            {% if request.user.is_authenticated %}
+            {% if profile %}
+                {% if profile.golbal_Admin == "True"%}
+                    <li  >
+                        <a href="{% url 'CreateFAQ' %}"><i class="metismenu-icon fa fa-question"></i>Create FAQ</a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
+
+            <li class="app-sidebar__heading">Profile</li>
+            <li {% if profile_section %} class="mm-active" {% endif %}>
+                <a href="{% url  'profile' %}"><i class="metismenu-icon fa fa-user"></i>View Profile</a>
+            </li>
+
+            <li {% if change_password_section %} class="mm-active" {% endif %}>
+                <a href="{% url 'change_password' %}"><i class="metismenu-icon fa fa-key"></i>Change Password</a>
+            </li>
+
+            {% if request.user.is_authenticated %}
+                {% if profile %}
+                    {% if profile.golbal_Admin == "True"%}
+                        <li {% if users_section %}class="mm-active" {% endif %} >
+                            <a href="{% url 'UserProfiles' %}"><i class="metismenu-icon fa fa-group"></i>View Users</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+            <li>
+                <a href="{% url 'logout_user_url' %}"><i class="metismenu-icon fa fa-sign-out"></i>Logout</a>
+            </li>
+        </ul>
+    </div>
+</div>

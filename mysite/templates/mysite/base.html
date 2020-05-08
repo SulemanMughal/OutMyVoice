@@ -1,0 +1,73 @@
+{% load static %}
+{% load social_share %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Responsive Settings -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <!-- Stylesheets -->
+    <link href="{% static 'mysite/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'mysite/css/style.css' %}" rel="stylesheet">
+
+    <!-- Responsive File -->
+    <link href="{% static 'mysite/css/responsive.css' %}" rel="stylesheet">
+
+    <!-- Icons File -->
+    <link rel="shortcut icon" href="{% static 'mysite/images/favicon.png' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'mysite/images/ndm.png' %}" type="image/x-icon">
+
+    <title>{% block title %}Voice It Out{% endblock %}</title>
+
+</head>
+
+<body>
+    <div class="page-wrapper">
+       
+        {% include 'mysite/header_2.html' %}
+
+        {%  block content %}
+
+        {% endblock %}
+        
+
+        {% include 'mysite/footer.html' %}
+    
+
+
+    </div>
+   
+
+
+    
+    <div class="scroll-to-top scroll-to-target" data-target="html"><span class="icon flaticon-up-arrow-angle"></span>
+    </div>
+
+    
+
+    <script src="{% static 'mysite/js/jquery.js' %}"></script>
+    <script src="{% static 'mysite/js/popper.min.js' %}"></script>
+    <script src="{% static 'mysite/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'mysite/js/jquery-ui.js' %}"></script>
+    <script src="{% static 'mysite/js/jquery.fancybox.js' %}"></script>
+    <script src="{% static 'mysite/js/owl.js' %}"></script>
+    <script src="{% static 'mysite/js/scrollbar.js' %}"></script>
+    <script src="{% static 'mysite/js/appear.js' %}"></script>
+    <script src="{% static 'mysite/js/wow.js' %}"></script>
+    <script src="{% static 'mysite/js/custom-script.js' %}"></script>
+
+
+    <script>
+        $(document).ready(function()
+        {
+            $("#id_author").addClass("form-control");
+        })
+    </script>
+
+</body>
+
+</html>

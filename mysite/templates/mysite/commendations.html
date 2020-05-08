@@ -1,0 +1,140 @@
+{% extends 'mysite/dashboard_base.html' %}
+{% load static FindCommendationResponseTrue FindCommendationResponseDate FindCommendationResponse  FindCommendationResponseTrueID %}
+
+{% block title %}
+    {% if my_petition_view %}
+        Voice It Out - User Petitions
+    {% elif create_petition_section %}
+        Voice It Out - Create Petition
+    {% elif commendations_section %}
+        Voice It Out - User Commendations
+    {% elif my_commendation_view_global %}
+        Voice It Out - Commendation Responses
+    {%  elif specific_commendation_view %}
+        {{ title }}
+    {% else %}
+        Voice It Out - User Dashboard
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="app-main__outer">
+    <div class="app-main__inner">
+        <div class="app-page-title">
+            <div class="page-title-wrapper">
+                <div class="page-title-heading">
+                    <div class="page-title-icon">
+                        <i class="fa fa-eye icon-gradient bg-mean-fruit">
+                        </i>
+                    </div>
+                    <div>
+
+                        {% if my_commendation_view_global %}
+                            Commendation Responses
+
+                            <br>
+                            <span>
+                                Total Submitted Responses: {% with total=commendations.count %}
+                                <button class="btn-pill btn-shadow btn-shine btn btn-focus btn-primary">{{ total }}
+                                    Reponse{{ total|pluralize }}</button>
+                                {% endwith %}
+                            </span>
+                        {% else %}
+
+                        Commendations
+                        {% endif %}
+
+                        {% if specific_commendation_view %}
+                        {{ title  }}'s Response
+
+                        <br>
+                        <button
+                            class="btn-pill btn-shadow btn-shine btn btn-focus btn-primary">{{ commendations.count }}
+                            Reponse{{ commendations.count|pluralize }}</button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="page-title-actions">
+
+                    <div class="d-inline-block dropdown">
+                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            class="btn-shadow dropdown-toggle btn btn-info">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="fa fa-business-time fa fa-eye"></i>
+                            </span>
+                            Buttons
+                        </button>
+                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'Self-Commendation' %}">
+                                        <i class="nav-link-icon fa fa-eye"></i>
+                                        <span>
+                                            My Commendations
+                                        </span>
+
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'Start-a-Commendation' %}">
+                                        <i class="nav-link-icon fa fa-plus-circle"></i>
+                                        <span>
+                                            Create Commendation
+                                        </span>
+
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabs-animation">
+
+
+            <div class="card mb-3">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i
+                            class="header-icon fa fa-laptop mr-3 text-muted opacity-6"> </i>All Commendations
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    {% if messages  %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                    <table style="width: 100%;" id="example" class="table table-hover table-striped table-bordered">
+                        {% if my_commendation_view_global or specific_commendation_view %}
+                            {% include 'modals/commendation/global_or_specific_commendation_table.html' %}
+                        {%  elif my_commendation_view %}
+                            {% include "modals/commendation/my_commendations.html" %}
+                        {% else %}
+                            {% include "modals/commendation/all_commendations_table.html" %}
+                        {% endif %}
+
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="app-wrapper-footer">
+        <div class="app-footer">
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

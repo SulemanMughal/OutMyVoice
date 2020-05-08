@@ -1,0 +1,230 @@
+{% extends 'mysite/base.html' %}
+{% load static %}
+{% block title %}
+
+{{ commendation.Commendation_Title|truncatechars:20 }}
+
+
+{% endblock %}
+{% block content %}
+
+    <!--Page Title-->
+    <section class="blog-banner">
+        <div class="image-layer" style="background-image:url(images/background/banner-image-6.jpg);"></div>
+
+        <div class="banner-inner">
+            <div class="auto-container">
+                <div class="inner-container clearfix">
+                    <!-- Commendation Coutner Here -->
+                    <div class="meta-info clearfix">
+                        <a href="#"><span class="fa fa-comment"></span>
+                            {% with total=commendation.commendation_signer_set.all.count %}
+                            {{ total }} Comment{{ total|default:1|pluralize }}
+                            {% endwith %}
+                        </a>
+                    </div>
+                    <!-- End -->
+                    <h1>{{ commendation.Commendation_Title   }}</h1>
+                    <div class="author-info clearfix">
+                        <div class="author-icon fa-1x" ><span class="flaticon-user-3  fa-2x"></span> By {{ commendation.user.username|capfirst  }}</div>
+                    </div>
+                    <div class="other-info clearfix">
+                        <div class="date"><span>{{ commendation.timestamp|timesince }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="sidebar-page-container">
+        <div class="auto-container">
+            <div class="row clearfix">
+                
+                <!--Content Side-->
+                <div class="content-side col-lg-8 col-md-12 col-sm-12">
+                    <div class="content-inner">
+                        <div class="single-post">
+                            <div class="post-details">
+                                <div class="main-image-box">
+                                    <figure class="image"><img src="/media/{{ commendation.Image }}" alt=""></figure>
+                                </div>
+                               {{ commendation.Expalnation|safe|escape  }}
+                            </div>
+
+                            <div class="share-post">
+                                <strong>Share this post with your friends</strong>
+                                <ul class="links clearfix">
+                                    <li class="facebook"><a href="#"><span class="icon fab fa-facebook-f"></span><span class="txt">Facebook</span></a></li>
+                                    <li class="twitter"><a href="#"><span class="icon fab fa-twitter"></span><span class="txt">Twiter</span></a></li>
+                                    <li class="linkedin"><a href="#"><span class="icon fab fa-linkedin-in"></span><span class="txt">Linkedin</span></a></li>
+                                    <li class="pinterest"><a href="#"><span class="icon fab fa-pinterest-p"></span><span class="txt">Pinterest</span></a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Author Box -->
+
+                            <!-- End Author Box -->
+
+                            <!-- Post Controls -->
+                            
+                            <!-- End Post Controls -->
+
+                            <div class="comments-area">
+                                
+                                <!-- commendation_counter_commment_section -->
+                                <div class="group-title">
+                                    {% with total=commendation.commendation_signer_set.all.count %}
+                                    <h2>Comment{{ total|default:1|pluralize }} <span>- {{ total }}</span></h2>
+                                    {% endwith %}
+                                    
+                                </div>
+                                <!-- End -->
+
+
+                                <!-- Commendation Signature Secion -->
+
+                                {% if commendation.commendation_signer_set.all %}
+                                {% for comment in commendation.commendation_signer_set.all %}
+                                    {% if  comment.show_comment %}
+                                    <div class="comment-box">
+                                        <div class="comment">
+                                            <div class="author-thumb">
+                                                <figure class="thumb"><img src="{% static 'mysite/images/resource/author-image-6.jpg' %}" alt=""></figure>
+                                            </div> 
+                                            <div class="info">
+                                                <span class="name">{{ comment.Name|capfirst }}</span>
+                                                <span class="date">{{ comment.timestamp|timesince }} ago</span>
+                                            </div>
+                                            <div class="text">{{  comment.Reason|safe }}</div>
+
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% endif %}
+
+
+
+                                    <!-- End -->
+
+                            </div>
+
+                            <div class="leave-comments">
+                                <div class="group-title">
+                                    <h2>Leave a Comment</h2>
+                                    <div class="instruction">Your email address will not be published. Required fields are marked *</div>
+                                </div>
+                                
+                                <div class="default-form comment-form">
+                                    <form method="post" action="{% url 'LiveCommendationSignature_URL' commendation.id %}">
+                                        {% csrf_token %}
+                                        <div class="row clearfix">
+
+                                            <div class="col-md-12 col-sm-12 form-group">
+                                                <textarea name="Reason" placeholder="Your Comments"></textarea>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-12 form-group">
+                                                <input type="text" name="Name" placeholder="Name*" required="" autocomplete="off">
+                                            </div>
+                                            
+                                            <div class="col-md-6 col-sm-12 form-group">
+                                                <input type="email" name="Email" placeholder="Email *" required="" autocomplete="off">
+                                            </div>
+                                            <div class="col-md-6 col-sm-12 form-group">
+                                                <input type="checkbox" class="custom-control-input" name="show_comment" id="customCheck1">
+                                                <label class="custom-control-label" for="customCheck1">Show Comment</label>
+                                            </div>
+                    
+                                            <div class="col-md-12 col-sm-12 form-group">
+                                                <button type="submit" class="theme-btn btn-style-one"><span class="btn-title">Submit Now</span></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Related Posts -->  
+                            <!-- End Related Posts -->
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--Sidebar Side-->
+                <div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
+                    <aside class="sidebar">
+                        <div class="bg-layer">
+                            <div class="image-layer" style="background-image:url(images/background/sidebar-bg-image.jpg);"></div>
+                        </div>
+
+                        <div class="sidebar-widget search-box">
+                            <div class="widget-inner">
+                                <div class="sidebar-title">
+                                    <h4>Search</h4>
+                                </div>
+                                <form method="GET" action="{% url 'search' %}">
+                                    <div class="form-group">
+                                        <input type="search" name="query" value="" placeholder="Keyword..." required="" autocomplete="off">
+                                        <button type="submit"><span class="icon flaticon-magnifying-glass"></span></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-widget cat-widget">
+                            <div class="widget-content">
+                                <div class="sidebar-title">
+                                    <h4>Commendation Coverage</h4>
+                                </div>
+                                <ul class="cat-links">
+                                    
+                                        <li ><a href="#">{{ commendation.Commendation_Coverage }}</a></li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-widget cat-widget">
+                            <div class="widget-content">
+                                <div class="sidebar-title">
+                                    <h4>Commendation Category</h4>
+                                </div>
+                                <ul class="cat-links">
+                                    {% if commendation.Commendation_Category %}
+                                        <li ><a href="#">{{ commendation.Commendation_Category }}</a></li>
+                                    {% elif commendation.Commendation_Category_Other %}
+                                        <li ><a href="#">{{ commendation.Commendation_Category_Other }}</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="sidebar-widget cat-widget">
+                            <div class="widget-content">
+                                <div class="sidebar-title">
+                                    <h4>Commendation Action Person</h4>
+                                </div>
+                                <ul class="cat-links">
+                                    {% if commendation.Action_Person %}
+                                        <li ><a href="#">{{ commendation.Action_Person }}</a></li>
+                                    {% elif commendation.Action_Person_Other %}
+                                        <li ><a href="#">{{ commendation.Action_Person_Other }}</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+
+
+                        
+
+                    </aside>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
