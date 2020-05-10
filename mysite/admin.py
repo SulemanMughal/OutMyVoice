@@ -4,17 +4,7 @@ from django.contrib import admin
 
 # from .forms import PetitionFormAdmin
 
-from .models import (
-    Petition,
-    UserProfile,
-    PetitionResponseFeedback,
-    Commendation,
-    CommendationResponseFeedback,
-    Petition_Signer,
-    AskedQuestions,
-    WebBanner
-)
-
+from .models import *
 
 # Petition Admin
 class PetitionAdmin(admin.ModelAdmin):
@@ -101,3 +91,5 @@ admin.site.register(CommendationResponseFeedback, CommendationResponseFeedbackAd
 admin.site.register(Petition_Signer)
 admin.site.register(AskedQuestions)
 admin.site.register(WebBanner)
+
+admin.site.register(Team)

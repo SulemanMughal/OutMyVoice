@@ -15,7 +15,7 @@ register = template.Library()
 
 def getImageBanner(user):
     try:
-       return WebBanner.objects.all()[0]
+       return WebBanner.objects.last()
     except:
         return None
 

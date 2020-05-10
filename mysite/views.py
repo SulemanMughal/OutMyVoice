@@ -10,7 +10,7 @@ from django.core.paginator import (
     EmptyPage, 
     PageNotAnInteger
 )
-
+from django.forms import formset_factory
 from django.http import (
     HttpResponse,
     HttpResponseRedirect
@@ -45,31 +45,13 @@ from django.utils.encoding import (
 )
 
 # Import APP Forms
-from .forms import (
-    loginForm,
-    registerForm,
-    EditProfileForm,
-    Petitionform,
-    PetitionResponseForm,
-    Commendationform, 
-    PetitionSignerform,
-    CommendationSignerform,
-    AskedQuestionsForm
-)
+from .forms import *
 
 # Import APP Tokens
 from .tokens import account_activation_token
 
 # Import APP Models
-from .models import (
-    UserProfile,
-    Petition,
-    PetitionResponseFeedback,
-    Commendation,
-    CommendationResponseFeedback,
-    Commendation_Signer,
-    AskedQuestions
-)
+from .models import *
 
 # User App Decorators
 from .decorators import simple_decorator
@@ -553,7 +535,7 @@ def SpecificViewPetition(request, petition_id):
         
         petitions = obj.petitionresponsefeedback_set.all()
         if len(petitions) == 0 :
-            messages.success(request, f"Your petition has been under review.")
+            messages.success(request, f"Petition has been under review.")
             return redirect(reverse("Petition_No_response", args=[obj.id]))
         # print(petitions)
         context = {
@@ -745,12 +727,6 @@ def LivePetitionsDetailView(request, petition_id):
         print(e)
         return redirect("LivePetitions_URL")
  
- 
- 
- 
- 
- 
-    
 # Petitions Live Detail View Comment URL (Only Unauth)
 def LivePetitionsSignatureView(request, petition_id):
     if request.method != "POST":
@@ -769,7 +745,118 @@ def LivePetitionsSignatureView(request, petition_id):
         # print(e)
         return redirect("LivePetitions_URL")
 
+                
+# ****************************************************************
+# Petition Details View In case of no response
+# ****************************************************************
+@login_required
+def NoResponsePetitionDetailView(request, petition_id):
+    template_name="mysite/petition_details.html"
+    try:
+        profile=UserProfile.objects.get(user=User.objects.get(username=request.user.username))
+        obj = Petition.objects.get(id=petition_id)
+        context={
+            'profile':profile,
+            'obj' : obj,
+            'specific_petition_details':True,
+            'form' : Petitionform(instance = obj)
+        }
+        return render(request, template_name, context)
+    
+    except Exception as e:
+        print(e)
+        return redirect("dashboard")
+   
 
+# ****************************************************************
+# Delete A Petition By A Global Admin
+# ****************************************************************
+@login_required
+def DeletePetition(request, petition_id):
+    if request.method != "GET":
+        messages.success(request, "Invalid Request")
+        return redirect("dashboard")
+    else:
+        try:
+            profile = UserProfile.objects.get(user = User.objects.get(username = request.user.username))
+            try:
+                if profile.golbal_Admin == "True":
+                    p = Petition.objects.get(id = petition_id)
+                    p.delete()
+                    messages.success(request, "Petition has been delete sucessfully")
+                    return redirect("dashboard")
+                else:
+                    messages.success(request, "You don't right to delete it.")
+                    return redirect(reverse("NoResponsePetitionDetailView", args= [petition_id]))
+            except Exception as e:
+                print(e)
+                messages.success(request, "Invalid Request")
+                return redirect("dashboard")
+        except Exception as e:
+            print(e)
+            messages.success(request, "Invalid Request")
+            return redirect("dashboard")
+        
+# ****************************************************************
+# Edit Petition by a global admin
+@login_required
+def EditPetition(request, petition_id):
+    if request.method !="POST":
+        messages.success(request, "Invalid Request")
+        return redirect("dashboard")
+    else:
+        try:
+            p = Petition.objects.get(id=petition_id)
+            try:
+                profile = UserProfile.objects.get(user = User.objects.get(username = request.user.username))
+                if profile.golbal_Admin == "True" or request.user == p.user:
+                    form = Petitionform(request.POST, request.FILES, instance = p)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(request, "Changes have been saved successfully")
+                        return redirect(reverse("Petition_No_response", args=[p.id]))
+                    else:
+                        print(str(form.errors))
+                        messages.success(request, "Invalid Changes")
+                        return redirect(reverse("Petition_No_response", args=[p.id]))
+                else:
+                    messages.success(request, "Invalid Request")
+                    return redirect("dashboard")
+            except Exception as e:
+                print(e)
+                messages.success(request, "Invalid Request")
+                return redirect("dashboard")
+        except Exception as e:
+            print(e)
+            messages.success(request, "Invalid Request")
+            return redirect("dashboard")
+# ****************************************************************
+    
+
+# ****************************************************************
+# Set Petition Time Response by a global admin
+# ****************************************************************
+@login_required
+def setPetitionTime(request, petition_id):
+    if request.method != "POST":
+        messages.success(request, "Invalid Request")
+        return redirect("dashboard")
+    else:
+        try:
+            profile = UserProfile.objects.get(user = User.objects.get(username = request.user.username))
+            if profile.golbal_Admin == "True":
+                p = Petition.objects.get(id=petition_id)
+                p.responseTime = request.POST.get("responseTime", timezone.now)
+                p.save()
+                return redirect("dashboard")
+            else:
+                messages.success(request, "Invalid Request")
+                return redirect("dashboard")
+        except Exception as e:
+            print(e)
+            messages.success(request, "Invalid Request")
+            return redirect("dashboard")
+        
 # **************************************** PETITION SECTION ****************************************
 
 
@@ -1076,7 +1163,8 @@ def Commendation_Details(request, commendation_id):
         context={
             'profile':profile,
             'obj' : obj,
-            'specific_commendation_details':True
+            'specific_commendation_details':True,
+            'form' : Commendationform(instance = obj)
         }
         return render(request, template_name, context)
     
@@ -1175,6 +1263,64 @@ def LiveCommendationSignatureView(request, commendation_id):
     
 
 
+# ****************************************************************
+# Delete Commendation by a global admin
+# ****************************************************************
+@login_required
+def DeleteCommendation(request, obj_id):
+    try:
+        profile = UserProfile.objects.get(user = User.objects.get(username = request.user.username))
+        if profile.golbal_Admin == "True":
+            c = Commendation.objects.get(id=obj_id)
+            c.delete()
+            messages.success(request, "Successfully delete")
+            return redirect("all-commendations-url")
+        else:
+            raise ValidationError("Error")
+    except Exception as e:
+        print(e)
+        messages.success(request, "Invalid Request")
+        return redirect("all-commendations-url")
+    
+    
+    
+    
+    
+# ****************************************************************
+# Edit Petition by a global admin
+@login_required
+def EditCommendation(request, obj_id):
+    if request.method !="POST":
+        messages.success(request, "Invalid Request")
+        return redirect("dashboard")
+    else:
+        try:
+            c = Commendation.objects.get(id=obj_id)
+            try:
+                profile = UserProfile.objects.get(user = User.objects.get(username = request.user.username))
+                if profile.golbal_Admin == "True" or request.user == c.user:
+                    form = Commendationform(request.POST, request.FILES, instance = c)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(request, "Changes have been saved successfully")
+                        return redirect(reverse("Commendation_Details", args=[c.id]))
+                    else:
+                        print(str(form.errors))
+                        messages.success(request, "Invalid Changes")
+                        return redirect(reverse("Commendation_Details", args=[c.id]))
+                else:
+                    messages.success(request, "Invalid Request")
+                    return redirect("all-commendations-url")
+            except Exception as e:
+                print(e)
+                messages.success(request, "Invalid Request")
+                return redirect("all-commendations-url")
+        except Exception as e:
+            print(e)
+            messages.success(request, "Invalid Request")
+            return redirect("all-commendations-url")
+# ****************************************************************
+    
 # ----------------------------------- WEB SPECIFIC PAGES --------------------------------------
 
 # ****************************************************************
@@ -1189,10 +1335,10 @@ def About(request):
 # ****************************************************************
 # Our Teams
 # ****************************************************************
-def Team(request):
+def TeamView(request):
     template_name = "web_pages/teams.html"
-    global_team = UserProfile.objects.filter(golbal_Admin = 'True')
-    coverage_team  = UserProfile.objects.all().exclude(golbal_Admin = 'True')
+    global_team = Team.objects.filter(gAdmin = 'True')
+    coverage_team  = Team.objects.all().exclude(gAdmin = 'True')
     context = {
         'global_team' : global_team,
         'coverage_team':coverage_team
@@ -1329,7 +1475,7 @@ def UserProfiles(request , user_id = None):
                     message = f"You account status has been updated by Global Admin : {request.user.email}"
                     email = EmailMessage(mail_subject, message, to=[U.email])
                     email.send()
-                    messages.success(request, str(U.username) + " Account Status has been updated")
+                    messages.success(request, str(U.email) + " Account Status has been updated")
                     return redirect("UserProfiles")
                 except:
                     messages.success(request, "Invalid Request")
@@ -1338,27 +1484,7 @@ def UserProfiles(request , user_id = None):
                 messages.success(request, "Invalid Request")
                 return redirect("UserProfiles")
                 
-                
-# ****************************************************************
-# Petition Details View In case of no response
-# ****************************************************************
-@login_required
-def NoResponsePetitionDetailView(request, petition_id):
-    template_name="mysite/petition_details.html"
-    try:
-        profile=UserProfile.objects.get(user=User.objects.get(username=request.user.username))
-        obj = Petition.objects.get(id=petition_id)
-        context={
-            'profile':profile,
-            'obj' : obj,
-            'specific_petition_details':True
-        }
-        return render(request, template_name, context)
-    
-    except Exception as e:
-        print(e)
-        return redirect("dashboard")
-    
+ 
 # ****************************************************************
 # Create FAQ View
 # ****************************************************************
@@ -1385,3 +1511,106 @@ def CreateFAQ(request):
             return redirect(reverse("dashboard"))    
     except:
         return redirect(reverse("dashboard"))
+
+
+
+# ****************************************************************
+# Add Team Members
+# ****************************************************************
+@login_required
+def addTeam(request):
+    try:
+        profile = UserProfile.objects.get(user = User.objects.get(username = request.user.username))
+    except Exception as e:
+        print(e)
+        profile = None
+    if profile is not None and profile.golbal_Admin == "True":
+        template_name= "teams/createTeamMember.html"
+        if request.method != "POST":
+            form = TeamForm()
+        else:
+            form = TeamForm(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    form.save()
+                    return redirect("team")
+                except Exception as e:
+                    print(e)
+                    messages.success(request, "Invalid Request")
+                    return redirect("dashboard")
+        context = {
+            'form' : form,
+            'Team_addition' : True,
+            'profile' : profile
+        }
+                
+        return render(request, template_name, context)
+    else:
+        messages.success(request, "Invalid Request")
+        return redirect("Self-Commendation")
+    
+# ****************************************************************
+# Remove User Profile
+# ****************************************************************
+@login_required
+def removeUser(request, user_id):
+    if request.method != "GET":
+        messages.success(request, "Invalid Request")
+        return redirect("Self-Petitions")
+    else:
+        try:
+            profile = UserProfile.objects.get(user = User.objects.get(username = request.user.username))
+            if profile.golbal_Admin == "True":
+                try:
+                    u = User.objects.get(id = user_id)
+                    
+                    messages.success(request, f"{u.email} has been removed successully.")
+                    u.delete()
+                    return redirect("UserProfiles")
+                except :
+                    messages.success(request, "Invalid Request")
+                    return redirect("dashboard")        
+            else:
+                messages.success(request, "Invalid Request")
+                return redirect("Self-Petitions")    
+        except:
+            messages.success(request, "Invalid Request")
+            return redirect("Self-Petitions")
+        
+# ****************************************************************
+# Add Banner to the website
+# ****************************************************************
+@login_required
+def addBanner(request):
+    try:
+        profile = UserProfile.objects.get(user = User.objects.get(username = request.user.username))
+        if profile.golbal_Admin == "True":
+            template_name="web_pages/add_banner.html"
+            ArticleFormSet = formset_factory(BannerForm,  extra=4, max_num=3)
+            if request.method != "POST":
+               ArticleFormSet = ArticleFormSet()
+            else:
+                formset = ArticleFormSet(request.POST, request.FILES)
+                for form in formset:
+                    try:
+                        if form.is_valid():
+                            if form.cleaned_data.get("banner",None) is not None:
+                                form.save()
+                                messages.success(request, "Successfully added banner to the website.")
+                        else:
+                            messages.success(request, str(form.errors))
+                    except Exception as e:
+                        messages.success(request, str(form.errors))
+            context = {
+                'ArticleFormSet': ArticleFormSet,
+                'profile':profile,
+                'banner_section' : True
+            }
+            return render(request, template_name, context)
+        else:
+            messages.success(request, "Invalid Request")
+            return redirect("dashboard")
+    except Exception as e:
+        print(e)
+        messages.success(request, "Invalid Request")
+        return redirect("dashboard")

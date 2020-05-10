@@ -69,6 +69,13 @@
         margin-right: auto;
     }
 </style>
+
+
+{% include 'modals/commendation/Delete_Confirm_modal.html' with obj=obj %}
+{% include 'modals/commendation/Edit_Commendation.html' with obj=obj %}
+
+
+
 <div class="app-main__outer">
     <div class="app-main__inner">
         <div class="app-page-title">
@@ -186,6 +193,37 @@
                 </div>
 
 
+                <div class="form-group">
+                    <label for="email">Commendation Response Time Limit</label>
+                    <div>
+                        <input type="text" class="form-control" value="{{ obj.responseTime }}" name="timestamp" disabled autocomplete="off" />
+                    </div>
+                </div>
+
+                {% if profile.golbal_Admin == "True" %}
+
+                <div class="form-group">
+                    <div>
+                        {% if obj.commendationresponsefeedback_set.all.count > 0 %}
+                            <a type="button" class="btn btn-primary" href="{% url 'ViewSpecificCommendationResponse_URL' obj.id %}">View All Commendation Responses</a>
+                        {% endif %}
+                        {% if not obj.approve %}
+                            <a type="submit" class="btn btn-primary" href="{% url 'approved_commendation_URL' obj.id %}">Approve & Live Commendation</a>
+                        {% endif %}
+                        <button type="button" class="btn btn-danger font-weight-bold"   data-toggle="modal" data-target="#exampleModal">Delete </button>
+                        <button type="button" class="btn btn-danger font-weight-bold"   data-toggle="modal" data-target="#exampleModalEditCommendation">Edit Commendation </button>
+                    </div>
+                </div>
+                
+
+                {% elif request.user == obj.user %}
+                    <button type="button" class="btn btn-danger font-weight-bold"   data-toggle="modal" data-target="#exampleModalEditPetition">Edit Petition </button>
+                    {% if obj.petitionresponsefeedback_set.all.count > 0 %}
+                            <a type="button" class="btn btn-primary" href="{% url 'SpecificViewPetition_URL' obj.id %}">View All Petition Responses</a>
+                        {% endif %}
+
+                {% endif %}
+            
 
                 
 
@@ -231,7 +269,10 @@
         });
 
 
-
+        $(document).ready(function()
+        {
+            $("#customCheck1").css("display", "none");
+        });
     </script>
     <script>
         CKEDITOR.replace('editor1');

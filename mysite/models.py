@@ -4,6 +4,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from .managers import *
 from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 COVERAGE_CHOICES =  (
     ('Nigeria','Nigeria'),
@@ -102,6 +103,7 @@ class Petition(models.Model):
     Image                   =       models.ImageField(blank=True)
     approve                 =       models.BooleanField(blank=True, default=None, null=True)
     timestamp               =       models.DateTimeField(auto_now_add=True)
+    responseTime = models.DateTimeField( default = timezone.now, verbose_name="Response Time")
 
     objects = models.Manager()
     approved_objects = ApprovedManager()
@@ -149,6 +151,7 @@ class Commendation(models.Model):
     Image                       =       models.ImageField(blank=True)
     approve                     =       models.BooleanField(blank=True, default=None, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    responseTime = models.DateTimeField( default = timezone.now, verbose_name="Response Time")
 
     objects = models.Manager()
     approved_objects = ApprovedCommendationManager()
@@ -255,3 +258,57 @@ class WebBanner(models.Model):
     
     def __str__(self):
         return str(self.banner)
+    
+    
+# ****************************************************************
+# Team Member Model
+# ****************************************************************
+
+def validate_image(image):
+    max_height = 500
+    max_width = 500
+    height = image.height
+    width = image.width
+    if width < max_width or height < max_height:
+        raise ValidationError("Allow Image Dimensions : 500x500")
+
+class Team(models.Model):
+    name= models.CharField(
+        max_length=100,
+        verbose_name="Member Name",
+        blank=False,
+        null = False,
+        default = None
+    )
+    
+    description = models.TextField(
+        verbose_name="Member Desciption",
+        max_length = 500,
+        blank = False,
+        null = False,
+        default=None
+    )
+    
+    gAdmin = models.CharField(
+        verbose_name="Global Admin",
+        blank  =False,
+        null=True,
+        default="None",
+        choices = GLOBAL_ADMIN_CHOICES,
+        max_length = 10
+    )
+    
+    cAdmin = models.CharField(
+        max_length = 100,
+        verbose_name = "Coverage Admin",
+        blank=False,
+        null= True,
+        default  = None,
+        choices = COVERAGE_CHOICES
+    )
+    iProfile = models.ImageField(verbose_name="Team Member Profile Image",
+                               upload_to = "Team/Images/%y/%m/%d/", validators=[validate_image])
+   
+    
+    def __str__(self):
+        return str(self.name)

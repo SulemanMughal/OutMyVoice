@@ -60,4 +60,9 @@ urlpatterns = [
     path("disapprove-blog/<int:blog_id>/", views.Disapprove, name="Disapprove"),
 
 
+    # ****************************************************************
+    # Delete Blog by global Admin
+    # ****************************************************************
+    path('delete-blog/<int:blog_id>', views.removeBlog, name="DeleteBlog"),
+
 ]

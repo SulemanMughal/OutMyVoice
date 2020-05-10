@@ -306,7 +306,7 @@ def Approve(request, blog_id):
         mail_subject = 'VoiceItOut Team.'
         message = f"Your blog has been approved and ready to publish  from Global Admin {request.user.username}"
         message += "\nYou can check  the details of the blog by following the below link:\n"
-        build_link = str(request.scheme) + "://" + str(get_current_site(request).domain) + str(reverse("detail", args=[blog_id]))
+        build_link = str(request.scheme) + "://" + str(get_current_site(request).domain) + str(reverse("detail", args=[blog.slug]))
         message += "\n" + str(build_link)
         email = EmailMessage(mail_subject, message, to=[blog.author.email, request.user.email])
         email.send()
@@ -336,7 +336,7 @@ def Disapprove(request, blog_id):
         mail_subject = 'VoiceItOut Team.'
         message = f"Your blog has been disapproved   from Global Admin {request.user.username}"
         message += "\nYou can check the details of the blog by following the below link:\n"
-        build_link = str(request.scheme) + "://" + str(get_current_site(request).domain) + str(reverse("detail", args=[blog_id]))
+        build_link = str(request.scheme) + "://" + str(get_current_site(request).domain) + str(reverse("detail", args=[blog.slug]))
         message += "\n" + str(build_link)
         email = EmailMessage(mail_subject, message, to=[blog.author.email, request.user.email])
         email.send()
@@ -347,3 +347,23 @@ def Disapprove(request, blog_id):
     except:
         messages.success(request, "Invalid Request")
         return redirect(reverse("list"))
+    
+# ****************************************************************
+# Delete blog
+# ****************************************************************
+@login_required
+def removeBlog(request, blog_id):
+    if request.method !="GET":
+        return redirect("list")
+    else:
+        try:
+            profile = UserProfile.objects.get(user = User.objects.get(username = request.user.username))
+            if profile.golbal_Admin == "True":
+                b = Blog.objects.get(id = blog_id)
+                b.delete()
+                return redirect("list")
+            else:
+                return redirect("list")
+        except Exception as e:
+            print(e)
+            return redirect("list")

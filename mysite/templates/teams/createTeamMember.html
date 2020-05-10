@@ -1,0 +1,163 @@
+{% extends 'mysite/dashboard_base.html' %}
+{% load static %}
+{% block title %}Voice It Out{% endblock %}
+
+{% block content %}
+<style>
+    /* HIDE RADIO */
+    [type=radio] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    /* IMAGE STYLES */
+    [type=radio]+img {
+        cursor: pointer;
+    }
+
+    /* CHECKED STYLES */
+    [type=radio]:checked+.states {
+
+        background-color: #5bd9af;
+        padding-top: 8px;
+        padding-left: 5px;
+        padding-bottom: 5px;
+        border-radius: 10px;
+        padding-right: 5px;
+    }
+
+    .state {
+        max-width: 74px;
+    }
+
+    #show_more {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        width: 100%;
+        font-size: 13px;
+        border: 1px solid transparent;
+        transition: 0.4s all;
+        background-color: #5bd9af;
+        border-radius: 3px;
+        padding: .538em 1.077em;
+        font-family: "Raleway", "Helvetica Neue", Arial, sans-serif;
+        font-weight: 600;
+        color: white;
+    }
+
+    #show_more:hover,
+    #show_more:focus {
+        background-color: white;
+        border-color: grey;
+        color: black;
+    }
+
+    .states_margin {
+        margin-right: 5px;
+    }
+
+    .center-block {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+<style>
+    .btn-lg{
+        width:200px !important;
+    }
+    label{
+        font-weight: bold;
+    }
+
+    
+</style>
+
+<div class="app-main__outer">
+    <div class="app-main__inner">
+        <div class="app-page-title">
+            <div class="page-title-wrapper">
+                <div class="page-title-heading">
+                    <div class="page-title-icon">
+                        <i class="fa fa-eye icon-gradient bg-mean-fruit">
+                        </i>
+                    </div>
+                    <div>Team Member
+                        <div class="page-title-subheading">Add All Required Information Carefuly
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+        <div class="card-body">
+            {% if messages  %}
+                {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if form.errors  %}
+                {% for field in form %}
+                    {% for message in field.errors %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+
+            <form action="{% url 'AddTeams' %}" method = "POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        <label for="email">{{ field.label }}</label>
+                        <div>
+                            {{ field }}
+                        </div>
+                        
+                    </div>
+                {% endfor %}
+                <button class="btn btn-success btn-lg font-weight-bold" type="submit">Add</button>
+            </form>
+            
+        </div>
+    </div>
+    <div class="app-wrapper-footer">
+        <div class="app-footer">
+
+        </div>
+    </div>
+</div>
+
+
+
+
+    <script src="{% static 'mysite/js/jquery.min.js' %}"></script>
+
+    <script>
+    $(document).ready(function()
+    {
+        $("input").addClass("form-control");
+        $("select").addClass("form-control");
+        $("input").attr("autocomplete", "off");
+        $("textarea").attr("rows", "6");
+        $("textarea").attr("cols", "150");
+        $("textarea").css("resize", "none");
+        $("textarea").addClass("form-control");
+    });
+</script>
+    
+{% endblock %}

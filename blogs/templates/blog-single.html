@@ -215,6 +215,7 @@
                                             <li ><a href="{% url 'Approve' blogs.id %}" class="text-success">Approve Current Blog</a></li>
                                             <li ><a href="{% url 'Disapprove' blogs.id %}" class="text-danger">Disapprove Current Blog</a></li>
                                         {% endif %}
+                                        <li ><a href="{% url 'DeleteBlog' blogs.id %}" class="text-warning">Delete  Current Blog</a></li>
                                     {% endif %}
                                     {% if blogs.author == request.user %}
                                         <li {% if self_blogs %} class="current" {% endif %}><a href="{% url 'blog_editing' blogs.id %}">Edit Current Blog</a></li>

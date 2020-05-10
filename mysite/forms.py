@@ -6,15 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core import validators
 from .models import ACTION_PERSON_CHOICES
 
-from .models import (
-    Petition,
-    PetitionResponseFeedback,
-    Commendation,
-    CommendationResponseFeedback,
-    Petition_Signer,
-    Commendation_Signer,
-    AskedQuestions
-)
+from .models import *
 from django.contrib.auth.forms import (
     UserCreationForm, 
     UserChangeForm
@@ -118,7 +110,6 @@ class Petitionform(forms.ModelForm):
 
 
 
-
 # Petition Response Feedback Form
 class PetitionResponseForm(forms.ModelForm):
     class Meta:
@@ -170,3 +161,17 @@ class AskedQuestionsForm(forms.ModelForm):
     class Meta:
         model = AskedQuestions
         fields = '__all__'
+        
+class TeamForm(forms.ModelForm):
+    class Meta:
+        model = Team
+        fields = "__all__"
+        
+        
+# ****************************************************************
+# Website Banner Form
+# ****************************************************************
+class BannerForm(forms.ModelForm):
+    class Meta:
+        model = WebBanner
+        fields = "__all__"

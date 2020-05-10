@@ -13,6 +13,7 @@ from . import views
 
 urlpatterns = [
     
+    
     # Home View URL
     url(r'^$', 
         views.home, 
@@ -77,6 +78,21 @@ urlpatterns = [
     ),
     
     
+    # ****************************************************************
+    # User Profile Page
+    # ****************************************************************
+    path("view-users-profiles/", views.UserProfiles, name="UserProfiles"),
+    
+    # ****************************************************************
+    # Update Specific User Profile
+    # ****************************************************************
+    path("view-users-profiles/<int:user_id>", views.UserProfiles, name="UserProfilesUpdate"),
+    
+    # ****************************************************************
+    # Remove Specific User
+    # ****************************************************************
+    path("remove-user/<int:user_id>", views.removeUser, name="removeUser"),
+    
     # **************************************PROFILE URL(s)***************************************
     
     # User Change Password View URL
@@ -85,6 +101,7 @@ urlpatterns = [
         name = "change_password"
     ),
     
+    # ------------------------------------PETITION URL(s)---------------------------------------
     
     # ****************************************************************
     # Petitions URL(s)
@@ -108,11 +125,31 @@ urlpatterns = [
     path("submit-a-response-petition/<int:petition_id>/", views.PetitionResponseFeedbackView, name="PetitionResponse"),
 
 
+    # ****************************************************************
+    # Delete Petition By A Global Admin
+    # ****************************************************************
+    path("delete-a-petition/<int:petition_id>/", views.DeletePetition, name="DeletePetition"),
 
     # ****************************************************************
-    # Commendations URL(s)
-    # ****************************************************************
+    # Petition Detail View in case of no responses submitted
+    # ****************************************************************  
+    path("patition-detail-no-response/<int:petition_id>/", views.NoResponsePetitionDetailView, name="Petition_No_response"),
 
+
+    # ****************************************************************
+    # Edit Petition By A Global Admin
+    # ****************************************************************
+    path("petition/Edit/<int:petition_id>/", views.EditPetition, name="EditPetition"),
+
+
+    # ****************************************************************
+    # Set Petition Time Response 
+    path("petition/set-time-response/<int:petition_id>", views.setPetitionTime, name="PetitionTimeResponse"),
+    # ****************************************************************
+    
+    # **************************************PETITION URL(s)***************************************
+    
+    
     # ****************************************************************
     # Create a Commendation
     # ****************************************************************
@@ -206,7 +243,15 @@ urlpatterns = [
         name="LiveCommendationSignature_URL"),
     
     
+    # ****************************************************************
+    # Delete Commendation by a global admin
+    # ****************************************************************
+    path("commendation/delete-commendation/<int:obj_id>", views.DeleteCommendation, name="DeleteCommendation"),
     
+    # ****************************************************************
+    # Edit Commendation Details by a global admin
+    path('commendation/edit/<int:obj_id>', views.EditCommendation, name="EditCommendation"),
+    # ****************************************************************
     # ------------------------------------ Web Specific Pages --------------------------------------
     
     # ****************************************************************
@@ -220,9 +265,7 @@ urlpatterns = [
     # ****************************************************************
     # Our Teams
     # ****************************************************************
-    path('our-team',
-        views.Team,
-        name="team"),
+    path('our-team',views.TeamView,name="team"),
     
     
     # ****************************************************************
@@ -257,20 +300,19 @@ urlpatterns = [
     path('partner', views.Partner, name="Partner"),
     
     
-    # ************************************* Web Specific Pages **************************************
-    
-    
-    path("view-users-profiles/", views.UserProfiles, name="UserProfiles"),
-    
-     path("view-users-profiles/<int:user_id>", views.UserProfiles, name="UserProfilesUpdate"),
-     
-    # ****************************************************************
-    # Petition Detail View in case of no responses submitted
-    # ****************************************************************  
-    path("patition-detail-no-response/<int:petition_id>/", views.NoResponsePetitionDetailView, name="Petition_No_response"),
-
     # ****************************************************************
     # Create FAQ
     # ****************************************************************
     path("create-faq", views.CreateFAQ, name="CreateFAQ"),
+    
+    # ****************************************************************
+    # Add Team Members
+    # ****************************************************************
+    path("add-team-members", views.addTeam, name="AddTeams"),
+
+    # ****************************************************************
+    # Add Banner to the website
+    # ****************************************************************
+    path("add-banner", views.addBanner, name="AddBanner"),
+    # ************************************* Web Specific Pages **************************************
 ]

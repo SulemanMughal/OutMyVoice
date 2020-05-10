@@ -1,0 +1,72 @@
+{% load static %}
+
+
+
+<link href="{% static 'mysite/css/bootstrap-datepicker.css' %}">
+
+<link href="{% static 'mysite/css/bootstrap-datepicker.min.css' %}">
+
+
+
+  <div class="modal fade" id="exampleModalEditCommendation" tabindex="-1" role="dialog" aria-labelledby="exampleModalEditPetitionexampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " role="document" style="max-width: 800px !important;">
+      <div class="modal-content" >
+          <form action="{% url 'EditCommendation' obj.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media }}
+            {{ form.date }}
+        <div class="modal-header">
+          <h5 class="modal-title font-weight-bold text-danger" id="exampleModalEditPetitionexampleModalLabel">Edit</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {% if form %}
+            
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="email">{{ field.label }}</label>
+                    {% if field.label == "Response Time" %}
+                    <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd">
+                      <input type="text" class="form-control" name="responseTime" value='{{ field.value|date }}'>
+                      <div class="input-group-addon">
+                          <span class="glyphicon glyphicon-th"></span>
+                      </div>
+                  </div>
+                    {% else %}
+
+                    <div >
+                        {{ field }}
+                    </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-success" type="submit">Save Changes </button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="{% static 'mysite/js/jquery.js' %}"></script>
+
+  <script>
+      $(document).ready(function()
+      {
+          $("body").prepend($("#exampleModalEditCommendation"));
+          $("input").addClass("form-control");
+          $("select").addClass("form-control");
+          $("#Image-clear_id").removeClass("form-control");
+          $("input").attr("autocomplete", "off");
+          $('.datepicker').datepicker();
+      })
+  </script>
+
+<script src="{% static 'mysite/js/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'mysite/js/bootstrap-datepicker.min.js' %}"></script>
