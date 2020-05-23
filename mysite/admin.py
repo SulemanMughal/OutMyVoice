@@ -92,4 +92,4 @@ admin.site.register(Petition_Signer)
 admin.site.register(AskedQuestions)
 admin.site.register(WebBanner)
 
-admin.site.register(Team)
+admin.site.register(Staff)

@@ -25,8 +25,8 @@ SECRET_KEY = '5w-hkn(wdk(7a8%3c%@247ay0vvui8&8g=bzvhxnmj51s4s05+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["68.183.152.8"]
-# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ["68.183.152.8", "127.0.0.1:8000"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -156,7 +156,7 @@ LOGOUT_URL = reverse_lazy('logout_user_url')
 
 #------------------------------------------------------------------------
 #Email Setting...
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.consolesssss.EmailBackend'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'futuresoftcode@gmail.com'

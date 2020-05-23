@@ -1337,8 +1337,8 @@ def About(request):
 # ****************************************************************
 def TeamView(request):
     template_name = "web_pages/teams.html"
-    global_team = Team.objects.filter(gAdmin = 'True')
-    coverage_team  = Team.objects.all().exclude(gAdmin = 'True')
+    global_team = Staff.objects.filter(gAdmin = 'True')
+    coverage_team  = Staff.objects.all().exclude(gAdmin = 'True')
     context = {
         'global_team' : global_team,
         'coverage_team':coverage_team

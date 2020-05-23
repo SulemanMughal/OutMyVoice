@@ -272,7 +272,7 @@ def validate_image(image):
     if width < max_width or height < max_height:
         raise ValidationError("Allow Image Dimensions : 500x500")
 
-class Team(models.Model):
+class Staff(models.Model):
     name= models.CharField(
         max_length=100,
         verbose_name="Member Name",
@@ -306,7 +306,7 @@ class Team(models.Model):
         default  = None,
         choices = COVERAGE_CHOICES
     )
-    iProfile = models.ImageField(verbose_name="Team Member Profile Image",
+    iProfile = models.ImageField(verbose_name="Staff Member Profile Image",
                                upload_to = "Team/Images/%y/%m/%d/", validators=[validate_image])
    
     

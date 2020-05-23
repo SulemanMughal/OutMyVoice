@@ -164,7 +164,7 @@ class AskedQuestionsForm(forms.ModelForm):
         
 class TeamForm(forms.ModelForm):
     class Meta:
-        model = Team
+        model = Staff
         fields = "__all__"
         
         
